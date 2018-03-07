@@ -43,7 +43,8 @@ const r = rethinkdbdash({
     db: nconf.get('rethink_database'),
     servers: [
         { host: nconf.get('rethink_host'), port: nconf.get('rethink_port') }
-    ]
+    ],
+    ssl: { rejectUnauthorized: false }
 });
 
 crate.connect(nconf.get('crate_host'), nconf.get('crate_port'));
