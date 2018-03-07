@@ -54,8 +54,8 @@ const router = new Router();
 
 app.use(logger());
 
-// HTTP GET /logs/cratedb?min=etc&max=etc to get logs between dates
-router.get('/logs/cratedb', async ctx => {
+// HTTP GET /logs/rethinkdb?min=etc&max=etc to get logs between dates
+router.get('/logs/rethinkdb', async ctx => {
     const { min, max } = ctx.query;
     if (!min || !max)
         ctx.throw(400, 'Must specify min and max in query string.');
@@ -76,8 +76,8 @@ router.get('/logs/cratedb', async ctx => {
     ctx.body = entries;
 });
 
-// HTTP GET /logs/rethinkdb?min=etc&max=etc to get logs between dates
-router.get('/logs/rethinkdb', async ctx => {
+// HTTP GET /logs/cratedb?min=etc&max=etc to get logs between dates
+router.get('/logs/cratedb', async ctx => {
     const { min, max } = ctx.query;
     if (!min || !max)
         ctx.throw(400, 'Must specify min and max in query string.');
