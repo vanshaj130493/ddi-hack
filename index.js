@@ -56,7 +56,7 @@ app.use(logger());
 router.get('/logs/cratedb', async ctx => {
     const { min, max } = ctx.query;
     if (!min || !max)
-        throw new Error('Must specify min and max in query string.');
+        ctx.throw(400, 'Must specify min and max in query string.');
 
     const minDate = moment.utc(min, moment.ISO_8601).toDate();
     const maxDate = moment.utc(max, moment.ISO_8601).toDate();
@@ -74,7 +74,7 @@ router.get('/logs/cratedb', async ctx => {
 router.get('/logs/rethinkdb', async ctx => {
     const { min, max } = ctx.query;
     if (!min || !max)
-        throw new Error('Must specify min and max in query string.');
+        ctx.throw(400, 'Must specify min and max in query string.');
 
     const minDate = moment.utc(min, moment.ISO_8601).toDate();
     const maxDate = moment.utc(max, moment.ISO_8601).toDate();
