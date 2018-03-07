@@ -17,6 +17,8 @@ const logger = require('koa-logger');
 const rethinkdbdash = require('rethinkdbdash');
 const moment = require('moment');
 
+const max_limit = 50000;
+
 // Initialize configuration variables
 nconf
     .argv({ parseValues: true })
@@ -58,12 +60,16 @@ router.get('/logs/cratedb', async ctx => {
     if (!min || !max)
         ctx.throw(400, 'Must specify min and max in query string.');
 
-    const minDate = moment.utc(min, moment.ISO_8601).toDate();
-    const maxDate = moment.utc(max, moment.ISO_8601).toDate();
+    const minDate = moment.utc(min, moment.ISO_8601);
+    const maxDate = moment.utc(max, moment.ISO_8601);
+
+    if (!minDate.isValid() || !maxDate.isValid())
+        ctx.throw(400, 'Min and max must be ISO 8601 date strings');
 
     const entries = await r
         .table('logs')
-        .filter(x => x('time').between(minDate, maxDate))
+        .filter(x => x('time').between(minDate.toDate(), maxDate.toDate()))
+        .limit(max_limit)
         .run();
 
     ctx.status = 200;
@@ -76,12 +82,15 @@ router.get('/logs/rethinkdb', async ctx => {
     if (!min || !max)
         ctx.throw(400, 'Must specify min and max in query string.');
 
-    const minDate = moment.utc(min, moment.ISO_8601).toDate();
-    const maxDate = moment.utc(max, moment.ISO_8601).toDate();
+    const minDate = moment.utc(min, moment.ISO_8601);
+    const maxDate = moment.utc(max, moment.ISO_8601);
+
+    if (!minDate.isValid() || !maxDate.isValid())
+        ctx.throw(400, 'Min and max must be ISO 8601 date strings');
 
     const entries = await crate.execute(
-        'SELECT * FROM logs WHERE time BETWEEN ? AND ?',
-        [minDate, maxDate]
+        'SELECT * FROM logs WHERE time BETWEEN ? AND ? LIMIT ?',
+        [minDate.toDate(), maxDate.toDate(), max_limit]
     );
 
     ctx.status = 200;
