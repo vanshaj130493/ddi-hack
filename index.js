@@ -69,7 +69,7 @@ router.get('/logs/rethinkdb', async ctx => {
 
     const entries = await r
         .table('logs')
-        .filter(x => x('time').between(minDate.toDate(), maxDate.toDate()))
+        .between(minDate.toDate(), maxDate.toDate(), { index: 'time' })
         .limit(max_limit)
         .run();
 
