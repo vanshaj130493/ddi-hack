@@ -13,6 +13,7 @@ const nconf = require( 'nconf' );
 const Koa = require( 'koa' );
 const Router = require( 'koa-router' );
 const crate = require( 'node-crate' );
+const logger = require( 'koa-logger' );
 const rethinkdbdash = require( 'rethinkdbdash' );
 const moment = require( 'moment' );
 
@@ -38,6 +39,8 @@ crate.connect( nconf.get( 'crate_host' ), nconf.get( 'crate_port' ) );
 // Start web server using Koa
 const app = new Koa();
 const router = new Router();
+
+app.use( logger() );
 
 // HTTP GET /logs/cratedb?min=etc&max=etc to get logs between dates
 router.get( '/logs/cratedb', async ctx => {
