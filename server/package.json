@@ -12,12 +12,15 @@
   },
   "dependencies": {
     "dotenv": "^5.0.1",
+    "fs": "0.0.1-security",
+    "http": "^0.0.0",
     "koa": "^2.5.0",
     "koa-logger": "^3.1.0",
     "koa-router": "^7.4.0",
     "moment": "^2.21.0",
     "nconf": "^0.10.0",
     "node-crate": "^2.0.3",
-    "rethinkdbdash": "^2.3.31"
+    "rethinkdbdash": "^2.3.31",
+    "socket.io": "^2.0.4"
   }
 }
