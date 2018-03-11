@@ -22,10 +22,7 @@
                 </nav>
                 <!-- A search box in the sidebar -->
                 <div class="search">
-                    <span class="search-box">
-                        <input type="text" placeholder="Search...">
-                        <div class="icon"><i class="fas fa-search"></i></div>
-                    </span>
+                  
                 </div>
                 <!-- A list of links or items in the sidebar -->
                 <ul class="items">
@@ -65,7 +62,7 @@
                 </main>
             </div>
         </div>
-		<style>
+<style>
 		
 .button {
   display: inline-block; 
@@ -110,8 +107,8 @@ h1 {
 }
 
 
-		</style>
-		<script>
+</style>
+<script>
 		
 function callApiForData() {
 
@@ -126,14 +123,7 @@ function callApiForData() {
         url: service,
         cache: false,
         success: function (resp) {
-         /* 
-        var myData = {};
-		myData.JSChart = {};
-		myData.JSChart.datasets = [];
-		myData.JSChart.datasets[0] = {};
-		myData.JSChart.datasets[0].type = "line";
-		myData.JSChart.datasets[0].data = resp.data;
-		*/
+        
 		var myChart = new JSChart('chartcontainer', 'line');
 		myChart.setDataJSON('myjsonfile.json');
 		myChart.setTitle("Content Size v/s Response Time");

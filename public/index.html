@@ -22,10 +22,7 @@
                 </nav>
                 <!-- A search box in the sidebar -->
                 <div class="search">
-                    <span class="search-box">
-                        <input type="text" placeholder="Search...">
-                        <div class="icon"><i class="fas fa-search"></i></div>
-                    </span>
+                    
                 </div>
                 <!-- A list of links or items in the sidebar -->
                 <ul class="items">
@@ -67,7 +64,7 @@
                 </main>
             </div>
         </div>
-		<style>
+<style>
 		
 .button {
   display: inline-block; 
@@ -91,11 +88,11 @@
   box-shadow: 0 0px #666;
   transform: translateY(4px);
 
-		</style>
-		<script>
+</style>
+<script>
 var current_page = 1;
 var records_per_page = 1;
-	var listing_table = document.getElementById("listingTable");
+var listing_table = document.getElementById("listingTable");
 var data = null;
 function callApiForData() {
 
@@ -117,21 +114,12 @@ function callApiForData() {
 		var current_page = 1;
 		var records_per_page = 1;
 
-		//window.onload = function() {
-			changePage(1);
-		//};
+		changePage(1);
 		
         },
      	
     });
-	/*
-	var socket = io.connect('http://optimum-jaybird.hackathon.venom360.com/api/test');
-
-		socket.on('notifyData', function (data) {
-			document.getElementById("paralogs").innerHTML = '<code>' + JSON.stringify(data) + '</code>';
-			document.getElementById("searchlogsbox").innerHTML = '<span class="search-box" ><input type="text" id = "searchlogs" placeholder="Search keyword"><div class="icon"><i class="fas fa-search"></i></div> </span><button class="button" onclick="findString()">Search</button>';
-		});
-	*/
+	
 }
 
 function findString () {
@@ -150,68 +138,46 @@ var str = document.getElementById("searchlogs").value;
 }
 
 function prevPage()
-		{
-			if (current_page > 1) {
-				current_page--;
-				changePage(current_page);
-			}
-		}
-
-		function nextPage()
-		{
-			if (current_page < numPages()) {
-				current_page++;
-				changePage(current_page);
-			}
-		}
-
-		function changePage(page)
-		{
-			var btn_next = document.getElementById("btn_next");
-			var btn_prev = document.getElementById("btn_prev");
-			//var listing_table = document.getElementById("listingTable");
-			var page_span = document.getElementById("page");
-
-			// Validate page
-			if (page < 1) page = 1;
-			if (page > numPages()) page = numPages();
-
-			listing_table.innerHTML = '<br><button class="button" onclick="prevPage();return false;">Prev</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="button" onclick="nextPage();return false;">Next</button><br><br>Log : <span id="page"></span>';
-
-			for (var i = (page-1) * records_per_page; i < (page * records_per_page) && i < data.length; i++) {
-				listing_table.innerHTML += JSON.stringify(data[i]) + "<br>";
-			}
-			page_span.innerHTML = page;
-/*
-			if (page == 1) {
-				btn_prev.style.visibility = "hidden";
-			} else {
-				btn_prev.style.visibility = "visible";
-			}
-
-			if (page == numPages()) {
-				btn_next.style.visibility = "hidden";
-			} else {
-				btn_next.style.visibility = "visible";
-			}
-			*/
-		}
-
-		function numPages()
-		{
-			return Math.ceil(data.length / records_per_page);
-		}
-
-/*
-function callDoneButtonAPI(name) {
-	var json_data = '{	"itemName" : "' + name + '"}';
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "https://quiet-thicket-68407.herokuapp.com/doneButton", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(json_data);
+{
+	if (current_page > 1) {
+		current_page--;
+		changePage(current_page);
+	}
 }
-*/
+
+function nextPage()
+{
+	if (current_page < numPages()) {
+		current_page++;
+		changePage(current_page);
+	}
+}
+
+function changePage(page)
+{
+	var btn_next = document.getElementById("btn_next");
+	var btn_prev = document.getElementById("btn_prev");
+	//var listing_table = document.getElementById("listingTable");
+	var page_span = document.getElementById("page");
+
+	// Validate page
+	if (page < 1) page = 1;
+	if (page > numPages()) page = numPages();
+
+	listing_table.innerHTML = '<br><button class="button" onclick="prevPage();return false;">Prev</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="button" onclick="nextPage();return false;">Next</button><br><br>Log : <span id="page"></span>';
+
+	for (var i = (page-1) * records_per_page; i < (page * records_per_page) && i < data.length; i++) {
+		listing_table.innerHTML += JSON.stringify(data[i], null, '<br>') + "<br>";
+	}
+	page_span.innerHTML = page;
+}
+
+function numPages()
+{
+	return Math.ceil(data.length / records_per_page);
+}
+
 </script>
 		
-    </body>
+</body>
 </html>

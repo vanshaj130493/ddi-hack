@@ -21,10 +21,7 @@
                 </nav>
                 <!-- A search box in the sidebar -->
                 <div class="search">
-                    <span class="search-box">
-                        <input type="text" placeholder="Search...">
-                        <div class="icon"><i class="fas fa-search"></i></div>
-                    </span>
+                   
                 </div>
                 <!-- A list of links or items in the sidebar -->
                 <ul class="items">
@@ -64,16 +61,16 @@
 				<div>
 				<center><h3>Content Size Details</h3></center>
                     <ul class="items">
-                        <li class="selected" id="min">Minimum : </li>
-                        <li class="selected" id="max">Maximum : </li>
-                        <li class="selected" id="avg">Average : </li>
-                        <li class="selected" id="med">Median : </li>
+                        <li class="selected" id="min"></li>
+                        <li class="selected" id="max"></li>
+                        <li class="selected" id="avg"></li>
+                        <li class="selected" id="med"></li>
                     </ul>
 				</div>
                 </main>
             </div>
         </div>
-		<style>
+<style>
 		
 .button {
   display: inline-block; 
@@ -116,8 +113,8 @@ h1 {
 #searchlogs{
 	position:fixed;
 }
-		</style>
-		<script>
+</style>
+<script>
 
 function callApiForData() {
 
@@ -132,58 +129,16 @@ function callApiForData() {
         url: service,
         cache: false,
         success: function (data) {
-            /*
-        var trHTML = '<thead><tr><th>Name</th><th>Quantity</th><th>Created-till-now</th><th>Predicted</th><th>Done Button</th></tr></thead><tbody>';
-
-		$.each(data, function (i, item) {
-			trHTML += '<tr><td>' + data[i].name + '</td><td>' + data[i].quantity + '</td><td>' + data[i].created_till_now + '</td><td>' + data[i].predicted + '</td><td><button class="button" onclick="callDoneButtonAPI(\'' + data[i].name + '\')">DONE</button></td></tr>';
-		});
-		
-		trHTML += '</tbody>';
-		$('#location').html(trHTML);
-        */
-		//document.getElementById("paralogs").innerHTML = '<code>' + JSON.stringify(data) + '</code>';
-		//document.getElementById("searchlogsbox").innerHTML = '<span class="search-box" ><input type="text" id = "searchlogs" placeholder="Search keyword"><div class="icon"><i class="fas fa-search"></i></div> </span><button class="button" onclick="findString()">Search</button>';
-		//data = JSON.parse(data);
-		document.getElementById("min").innerHTML = document.getElementById("min").innerHTML + data.stat.minConLen;
-		document.getElementById("max").innerHTML = document.getElementById("max").innerHTML + data.stat.maxConLen;
-		document.getElementById("avg").innerHTML = document.getElementById("avg").innerHTML + data.stat.avgConLen;
-		document.getElementById("med").innerHTML = document.getElementById("med").innerHTML + data.stat.medConLen;
-        },
-        /*
-        error: function (msg) {
             
-            alert(msg.responseText);
-        }
-		*/
+		document.getElementById("min").innerHTML = 'Minimum : ' + data.stat.minConLen;
+		document.getElementById("max").innerHTML = 'Maximum : ' + data.stat.maxConLen;
+		document.getElementById("avg").innerHTML = 'Average : ' + data.stat.avgConLen;
+		document.getElementById("med").innerHTML = 'Median : ' + data.stat.medConLen;
+        },
+        
     });
 	
-	//(callApiForTableData, 2000);
 }
-
-function findString () {
-var str = document.getElementById("searchlogs").value;
- if (parseInt(navigator.appVersion)<4) return;
- var strFound;
- if (window.find) {
-
-  strFound=self.find(str);
-  if (!strFound) {
-   strFound=self.find(str,0,1);
-   while (self.find(str,0,1)) continue;
-  }
- }
- return;
-}
-/*
-function callDoneButtonAPI(name) {
-	var json_data = '{	"itemName" : "' + name + '"}';
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "https://quiet-thicket-68407.herokuapp.com/doneButton", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(json_data);
-}
-*/
 </script>
 		
     </body>

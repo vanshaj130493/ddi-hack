@@ -27,8 +27,6 @@ var fs = require('fs');
 
 const max_limit = 50000;
 
-const sample_data = {"agent":"testdata","architecture":"x86_64","availabilityZone":"us-west-2b","contentLength":"7930","country":"testdata","err":"testdata","hostname":"ip-172-31-32-192","imageId":"ami-b730b0cf","instanceId":"i-07d8e76bcfe0e0afa","level":30,"ms":"12.792","msg":"GET /collection/bf8074ca-0d98-40d4-81d1-496ceb34aaf7 200 12.792 ms - 7930","name":"Venom","pid":16145,"privateIp":"172.31.32.192","publicHostname":"ec2-54-71-13-207.us-west-2.compute.amazonaws.com","publicIpv4":"54.71.13.207","region":"us-west-2","remoteAddress":"174.103.142.39","req":{"remotePort":55022,"headers":{"if-none-match":"W/\"1efa-tO48h5jKp0WmeztjvIoyRFlCOrs\"","x-forwarded-proto":"http","signature":"","access-control-allow-headers":"Content-Type, Origin","x-forwarded-port":"443","x-forwarded-for":"174.103.142.39, 172.31.35.147","protocol-version":"1.1","access-control-allow-methods":"GET, OPTIONS","x-real-ip":"172.31.35.147","access-control-allow-origin":"*","if-modified-since":"Sun, 04 Mar 2018 04:02:42 GMT+00:00","host":"api.im360.com","x-nginx-proxy":"true","connection":"upgrade","content-type":"application/json","accept-encoding":"gzip","key":"61d74a94-b52d-4aa7-ab09-25531ed9638a","user-agent":"Dalvik/2.1.0 (Linux; U; Android 7.0; SM-G950U Build/NRD90M)"},"method":"GET","url":"/api/v1.1/collection/bf8074ca-0d98-40d4-81d1-496ceb34aaf7","remoteAddress":"127.0.0.1"},"reqStart":"2018-03-04T18:42:08.637Z","res":{"header":"HTTP/1.1 200 OK\r\nX-DNS-Prefetch-Control: off\r\nStrict-Transport-Security: max-age=15552000; includeSubDomains\r\nX-Download-Options: noopen\r\nX-Content-Type-Options: nosniff\r\nX-XSS-Protection: 1; mode=block\r\nServer-Version: v1.8.6-2-g3dac0d9\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: 7930\r\nETag: W/\"1efa-tO48h5jKp0WmeztjvIoyRFlCOrs\"\r\nDate: Sun, 04 Mar 2018 18:42:08 GMT\r\nConnection: keep-alive\r\n\r\n","statusCode":200},"resStart":"2018-03-04T18:42:08.650Z","startTime":"testdata","time":"2018-03-04T18:42:08.650Z","type":"access","url":"testdata","v":0,"venom_version":"v1.8.6-2-g3dac0d9","version":"v1.8.6-2-g3dac0d9"};
-
 // Initialize configuration variables
 nconf
     .argv({ parseValues: true })
@@ -148,8 +146,10 @@ router.get('/test1', async ctx => {
 	res.stat.maxResTime = Math.max.apply(null, resTime);
 	res.stat.avgConLen = (conLenSum/conLen.length).toFixed(3);
 	res.stat.avgResTime = (resTimeSum/resTime.length).toFixed(3);
-	res.stat.medConLen = (Math.min.apply(null, conLen) + Math.max.apply(null, conLen))/2;
-	res.stat.medResTime = (Math.min.apply(null, resTime) + Math.max.apply(null, resTime))/2;
+	conLen.sort();
+	resTime.sort();
+	res.stat.medConLen = conLen[Math.floor(conLen.length/2)];
+	res.stat.medResTime = resTime[Math.floor(resTime.length/2)];
 	
     ctx.status = 200;
     ctx.body = res;
@@ -202,45 +202,11 @@ router.get('/test2', async ctx => {
 		myData.JSChart.datasets[0].type = "line";
 		myData.JSChart.datasets[0].data = data;
 		
-	fs.writeFileSync('../public/myjsonfile.json', JSON.stringify(myData));//, function(err){
+	fs.writeFileSync('../public/myjsonfile.json', JSON.stringify(myData));
 		console.log("json file written");
 		ctx.status = 200;
 		ctx.body = res;
-	//}); 
 });
-
-router.get('/test', async ctx => {
-    const { min, max } = ctx.query;
-    if (!min || !max)
-        ctx.throw(400, 'Must specify min and max in query string.');
-
-    const minDate = moment.utc(min, moment.ISO_8601);
-    const maxDate = moment.utc(max, moment.ISO_8601);
-
-    if (!minDate.isValid() || !maxDate.isValid())
-        ctx.throw(400, 'Min and max must be ISO 8601 date strings');
-
-    const entries = await crate.execute(
-        'SELECT * FROM logs WHERE time BETWEEN ? AND ? LIMIT ?',
-        [minDate.toDate(), maxDate.toDate(), max_limit]
-    );
-	
-	var i = 0;
-	/*io.on('connection', function(){ 
-		io.emit('broadcast', getNextData(i++));
-	});
-	*/
-	
-	//setTimeout(function(){
-		io.sockets.emit('broadcast', getNextData(i++,entries.json));
-	//}, 3000); 
-    ctx.status = 200;
-    ctx.body = entries.json;
-});
-
-function getNextData(i,data) {
-	return data[i];
-}
 
 // Use router middleware
 app.use(router.routes());
