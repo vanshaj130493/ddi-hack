@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hackathon Sample UI - Log Viewer</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+        <link rel="stylesheet" href="style.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <!-- A sidebar where you can put anything you want, or remove it -->
+            <div class="sidebar">
+                <!-- A tabbed navigation in the sidebar -->
+                <nav>
+                    <ul>
+                        <li class="current"><a href="http://optimum-jaybird.hackathon.venom360.com/">Data Statistics</a></li>
+                        <li><a href="http://optimum-jaybird.hackathon.venom360.com/dataComp.html">Data Comparison</a></li>
+                    </ul>
+                </nav>
+                <!-- A search box in the sidebar -->
+                <div class="search">
+                    <span class="search-box">
+                        <input type="text" placeholder="Search...">
+                        <div class="icon"><i class="fas fa-search"></i></div>
+                    </span>
+                </div>
+                <!-- A list of links or items in the sidebar -->
+                <ul class="items">
+                    <li><a href="http://optimum-jaybird.hackathon.venom360.com/">Search Logs</a></li>
+                    <li><a href="http://optimum-jaybird.hackathon.venom360.com/conLen.html">Content Size Details</a></li>
+                    <li class="current"><a href="http://optimum-jaybird.hackathon.venom360.com/resTime.html">Response Time Details</a></li>
+                </ul>
+            </div>
+            <!-- A main content area -->
+            <div class="main-area">
+                <!-- A header above the main content -->
+                <header>
+                    <div class="headtext">
+                    <center><h1>DDI Hackathon</h1></center></div>
+                </header>
+                <!-- The main content area, you could put logs here -->
+                <main>
+				<div>
+					<form action="#" id="formId" name="formName">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="search-box">
+                        <input type="text" id = "from" placeholder="From Date">
+                        <div class="icon"><i class="fas fa-search"></i></div>
+                    </span>
+					 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="search-box">
+                        <input type="text" id = "to" placeholder="To Date">
+                        <div class="icon"><i class="fas fa-search"></i></div>
+                    </span>
+					<button class="button" onclick="callApiForData();return false;">Show Statistics</button>
+					<div id = "searchlogsbox">
+					
+					</div>
+					</form>
+				</div>
+				<div>
+				<center><h3>Response Time Details</h3></center>
+                    <ul class="items">
+                        <li class="selected" id="min">Minimum : </li>
+                        <li class="selected" id="max">Maximum : </li>
+                        <li class="selected" id="avg">Average : </li>
+                        <li class="selected" id="med">Median : </li>
+                    </ul>
+				</div>
+                </main>
+            </div>
+        </div>
+		<style>
+		
+.button {
+  display: inline-block; 
+  padding: 18px 50;
+  font-size: 20px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #555555;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 5px #999;
+}
+
+.button:hover {background-color: #333333}
+
+.button:active {
+  background-color: #333333;
+  box-shadow: 0 0px #666;
+  transform: translateY(4px);
+		
+h1 {
+	color: #777777;
+	background-color : blue;
+}
+
+.headtext {
+	color: #777777;
+	background-color : blue;
+}
+		
+#paralogs{
+	max-width: 100%;
+	overflow-y: scroll; 
+	overflow-x: hidden;
+}
+
+#searchlogs{
+	position:fixed;
+}
+		</style>
+		<script>
+
+function callApiForData() {
+
+    jQuery.support.cors = true;
+	var fromdate = document.getElementById("from").value;
+	var todate = document.getElementById("to").value;
+	var service = 'http://optimum-jaybird.hackathon.venom360.com/api/test1?min='+ fromdate + '&max=' + todate;
+
+    $.ajax(
+    {
+        type: "GET",
+        url: service,
+        cache: false,
+        success: function (data) {
+            /*
+        var trHTML = '<thead><tr><th>Name</th><th>Quantity</th><th>Created-till-now</th><th>Predicted</th><th>Done Button</th></tr></thead><tbody>';
+
+		$.each(data, function (i, item) {
+			trHTML += '<tr><td>' + data[i].name + '</td><td>' + data[i].quantity + '</td><td>' + data[i].created_till_now + '</td><td>' + data[i].predicted + '</td><td><button class="button" onclick="callDoneButtonAPI(\'' + data[i].name + '\')">DONE</button></td></tr>';
+		});
+		
+		trHTML += '</tbody>';
+		$('#location').html(trHTML);
+        */
+		//document.getElementById("paralogs").innerHTML = '<code>' + JSON.stringify(data) + '</code>';
+		//document.getElementById("searchlogsbox").innerHTML = '<span class="search-box" ><input type="text" id = "searchlogs" placeholder="Search keyword"><div class="icon"><i class="fas fa-search"></i></div> </span><button class="button" onclick="findString()">Search</button>';
+		//data = JSON.parse(data);
+		document.getElementById("min").innerHTML = document.getElementById("min").innerHTML + data.stat.minResTime;
+		document.getElementById("max").innerHTML = document.getElementById("max").innerHTML + data.stat.maxResTime;
+		document.getElementById("avg").innerHTML = document.getElementById("avg").innerHTML + data.stat.avgResTime;
+		document.getElementById("med").innerHTML = document.getElementById("med").innerHTML + data.stat.medResTime;
+        },
+        /*
+        error: function (msg) {
+            
+            alert(msg.responseText);
+        }
+		*/
+    });
+	
+	//(callApiForTableData, 2000);
+}
+
+function findString () {
+var str = document.getElementById("searchlogs").value;
+ if (parseInt(navigator.appVersion)<4) return;
+ var strFound;
+ if (window.find) {
+
+  strFound=self.find(str);
+  if (!strFound) {
+   strFound=self.find(str,0,1);
+   while (self.find(str,0,1)) continue;
+  }
+ }
+ return;
+}
+/*
+function callDoneButtonAPI(name) {
+	var json_data = '{	"itemName" : "' + name + '"}';
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "https://quiet-thicket-68407.herokuapp.com/doneButton", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(json_data);
+}
+*/
+</script>
+		
+    </body>
+</html>
